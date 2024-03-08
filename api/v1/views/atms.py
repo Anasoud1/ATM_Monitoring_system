@@ -56,8 +56,8 @@ def delete_atm(atm_id):
     return make_response(jsonify({}), 200)
 
 
-@app_views.route('/atms', methods=['POST'], strict_slashes=False)
-def create_atm():
+@app_views.route('/branches/<branch_id>/atms', methods=['POST'], strict_slashes=False)
+def create_atm(branch_id):
     """
     Create a atm
     """
@@ -67,7 +67,7 @@ def create_atm():
         abort(400, description="Missing atm name")
     
     data = request.get_json()
-    atm = ATM(**data)
+    atm = ATM(**data, branchId=branch_id)
     storage.new(atm)
     storage.save()
     return make_response(jsonify(atm.to_dict()), 201)

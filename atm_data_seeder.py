@@ -84,6 +84,7 @@ class Branch(Base, BaseModel):
     branchName = Column(String(50))
     regionId = Column(Integer, ForeignKey(Region.id))
 
+    #add relationship with ATM
     atms_b = relationship("ATM", backref='branch')
 
     @property
@@ -111,7 +112,18 @@ class Group(Base, BaseModel):
     groupDescription = Column(String(5000))
     groupType = Column(Enum("Static", "Dynamic"))
 
+    #add relationship with ATM
     atms = relationship("ATM", secondary="group_atm", backref="groups")
+
+    @property
+    def atms_g(self):
+        """ getter for list of atms related to the group"""
+        atm_list = []
+        from models import storage
+        for atm in storage.all(ATM).values():
+            if atm.groupId == self.groupId:
+                atm_list.append(atm)
+        return atm_list
 
     def __repr__(self):
         return (
@@ -153,8 +165,12 @@ class ATM(Base, BaseModel):
     software_version = Column(String(50))
     uptime = Column(Integer)
 
+    #add relationship with electronicJournal
+    eljournals = relationship("ElectronicJournal", backref="atm_elj") 
+
     # Relationship with AtmDevice
     devices = relationship("AtmDevice", backref="atm")
+    
 
     def __repr__(self):
         return f"ATM(atmId={self.atmId}, \
@@ -167,8 +183,8 @@ class ATM(Base, BaseModel):
 group_atm = Table(
     "group_atm",
     Base.metadata,
-    Column("groupId", Integer, ForeignKey("Group.groupId")),
-    Column("atmId", Integer, ForeignKey("ATM.atmId")),
+    Column("groupId", Integer, ForeignKey("Group.groupId"), primary_key=True),
+    Column("atmId", Integer, ForeignKey("ATM.atmId"), primary_key=True),
 )
 
 
@@ -195,6 +211,33 @@ class ElectronicJournal(Base, BaseModel):
 
     # Relationship with ATM table
     atm = relationship("ATM", backref="electronic_journals")
+    
+    #add relationship with Event table
+    events = relationship("Event", backref="elj")
+    
+    #add relationship with Transaction table
+    transactions = relationship("Transaction", backref="elj_t")
+
+    @property
+    def events(self):
+        """ getter for list of events related to the elctronic journal"""
+        event_list = []
+        from models import storage
+        for event in storage.all(Event).values():
+            if event.ejId == self.ejId:
+                event_list.append(event)
+        return event_list 
+
+    @property
+    def transactions(self):
+        """ getter for list of transactions related to the elctronic journal"""
+        transaction_list = []
+        from models import storage
+        for transaction in storage.all(Transaction).values():
+            if transaction.ejId == self.ejId:
+                transaction_list.append(transaction)
+        return transaction_list
+
 
     def __repr__(self):
         return f"<ElectronicJournal(ejId={self.ejId}, \
@@ -212,7 +255,7 @@ class Event(Base, BaseModel):
     ejId = Column(Integer, ForeignKey("ElectronicJournal.ejId"))
 
     # Relationship with ElectronicJournal table
-    electronic_journal = relationship("ElectronicJournal", backref="events")
+    #electronic_journal = relationship("ElectronicJournal", backref="events")
 
     def __repr__(self):
         return f"<Event(eventId={self.eventId},\
@@ -230,8 +273,8 @@ class Transaction(Base, BaseModel):
     ejId = Column(Integer, ForeignKey("ElectronicJournal.ejId"))
 
     # Relationship with ElectronicJournal table
-    electronic_journal = relationship("ElectronicJournal",
-                                      backref="transactions")
+    #electronic_journal = relationship("ElectronicJournal",
+    #                                  backref="transactions")
 
     def __repr__(self):
         return f"<Transaction(transactionId={self.transactionId}, \

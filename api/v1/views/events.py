@@ -3,8 +3,22 @@
 from flask import jsonify, abort, make_response, request
 from api.v1.views import app_views
 from models import storage
-from models.engine.db_storage import Event
+from models.engine.db_storage import ElectronicJournal, Event
 
+
+@app_views.route('/eljs/<elj_id>/events', strict_slashes=False)
+def get_events_by_elj(elj_id):
+    """
+    Retrieves the list of all event objects
+    of a specific electonicJournal
+    """
+    list_ev = []
+    ej = storage.get(ElectronicJournal, elj_id)
+    if not ej:
+        abort(404)
+    for event in ej.events:
+        list_ev.append(event.to_dict())
+    return jsonify(list_ev)
 
 @app_views.route('/events', strict_slashes=False)
 def get_events():
@@ -42,8 +56,8 @@ def delete_event(event_id):
     return make_response(jsonify({}), 200)
 
 
-@app_views.route('/events', methods=['POST'], strict_slashes=False)
-def create_event():
+@app_views.route('/eljs/<elj_id>/events', methods=['POST'], strict_slashes=False)
+def create_event(elj_id):
     """
     Create a event
     """
@@ -53,7 +67,7 @@ def create_event():
         abort(400, description="Missing event name")
     
     data = request.get_json()
-    event = Event(**data)
+    event = Event(**data, ejId=elj_id)
     storage.new(event)
     storage.save()
     return make_response(jsonify(event.to_dict()), 201)

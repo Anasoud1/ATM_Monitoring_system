@@ -56,8 +56,8 @@ def delete_branch(branch_id):
     return make_response(jsonify({}), 200)
 
 
-@app_views.route('/branches', methods=['POST'], strict_slashes=False)
-def create_branch():
+@app_views.route('/regions/<region_id>/branches', methods=['POST'], strict_slashes=False)
+def create_branch(region_id):
     """
     Create a Branch
     """
@@ -67,7 +67,7 @@ def create_branch():
         abort(400, description="Missing branch name")
     
     data = request.get_json()
-    branch = Branch(**data)
+    branch = Branch(**data, regionId=region_id)
     storage.new(branch)
     storage.save()
     return make_response(jsonify(branch.to_dict()), 201)

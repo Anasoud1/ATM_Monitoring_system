@@ -3,8 +3,22 @@
 from flask import jsonify, abort, make_response, request
 from api.v1.views import app_views
 from models import storage
-from models.engine.db_storage import Transaction
+from models.engine.db_storage import Transaction, ElectronicJournal
 
+
+@app_views.route('/eljs/<elj_id>/transactions', strict_slashes=False)
+def get_transaction_by_elj(elj_id):
+    """
+    Retrieves the list of all transaction objects
+    of a specific electonicJournal
+    """
+    list_tr = []
+    ej = storage.get(ElectronicJournal, elj_id)
+    if not ej:
+        abort(404)
+    for transaction in ej.transactions:
+        list_tr.append(transaction.to_dict())
+    return jsonify(list_tr)
 
 @app_views.route('/transactions', strict_slashes=False)
 def get_transactions():
@@ -42,8 +56,8 @@ def delete_transaction(transaction_id):
     return make_response(jsonify({}), 200)
 
 
-@app_views.route('/transactions', methods=['POST'], strict_slashes=False)
-def create_transaction():
+@app_views.route('/eljs/<elj_id>/transactions', methods=['POST'], strict_slashes=False)
+def create_transaction(elj_id):
     """
     Create a transaction
     """
@@ -53,7 +67,7 @@ def create_transaction():
         abort(400, description="Missing transaction type")
     
     data = request.get_json()
-    transaction = Transaction(**data)
+    transaction = Transaction(**data, ejId=elj_id)
     storage.new(transaction)
     storage.save()
     return make_response(jsonify(transaction.to_dict()), 201)
