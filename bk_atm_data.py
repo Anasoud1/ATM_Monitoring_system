@@ -151,6 +151,7 @@ group_atm = Table(
 class AtmDevice(Base):
     __tablename__ = "AtmDevice"
 
+    id = Column(Integer, primary_key=True, autoincrement=True)
     atmId = Column(Integer, ForeignKey(ATM.atmId), primary_key=True)
     deviceId = Column(Integer, ForeignKey(Device.deviceId), primary_key=True)
     deviceStatus = Column(String(20))
@@ -232,6 +233,7 @@ with sessionmaker(bind=engine)() as session:
     for table_name, table_data in data.items():
         # Get the corresponding table model class
         table_model = getattr(sys.modules[__name__], table_name)
+        print(sys.modules[__name__].__dict__)
 
         # Insert data into the table
         for row in table_data:

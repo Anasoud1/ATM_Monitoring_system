@@ -140,6 +140,9 @@ class Device(Base, BaseModel):
     deviceManufacturer = Column(String(100))  # Adjust length as needed
     deviceSerialNumber = Column(String(50))  # Adjust length as needed
 
+    # add relationship with AtmDevice
+    atms_d = relationship("AtmDevice", backref="device")
+
     def __repr__(self):
         return f"Device(deviceId={self.deviceId}, \
                         deviceModel='{self.deviceModel}', \
@@ -190,7 +193,7 @@ group_atm = Table(
 
 class AtmDevice(Base, BaseModel):
     __tablename__ = "AtmDevice"
-
+    id = Column(Integer, primary_key=True, autoincrement=True)
     atmId = Column(Integer, ForeignKey(ATM.atmId), primary_key=True)
     deviceId = Column(Integer, ForeignKey(Device.deviceId), primary_key=True)
     deviceStatus = Column(String(20))
@@ -210,7 +213,7 @@ class ElectronicJournal(Base, BaseModel):
     timestamp = Column(String(100), nullable=False)
 
     # Relationship with ATM table
-    atm = relationship("ATM", backref="electronic_journals")
+    #atm = relationship("ATM", backref="electronic_journals")
     
     #add relationship with Event table
     events = relationship("Event", backref="elj")

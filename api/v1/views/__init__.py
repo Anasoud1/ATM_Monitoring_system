@@ -13,3 +13,5 @@ from api.v1.views.atms import *
 from api.v1.views.electronic_journals import *
 from api.v1.views.events import *
 from api.v1.views.transactions import *
+from api.v1.views.atmDevice import *
+from api.v1.views.groups_atms import *
