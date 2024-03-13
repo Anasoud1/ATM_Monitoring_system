@@ -57,11 +57,11 @@ def get_atm(atm_id):
     new_dict["regionName"] = regionName
     return jsonify(new_dict)
 
-
+'''
 @app_views.route('/atms/<atm_id>', methods=['DELETE'], strict_slashes=False)
 def delete_atm(atm_id):
     """
-    Delete a specific atm
+    Deletes a specific atm
     """
     atm = storage.get(ATM, atm_id)
     if not atm:
@@ -69,7 +69,7 @@ def delete_atm(atm_id):
     storage.delete(atm)
     storage.save()
     return make_response(jsonify({}), 200)
-
+'''
 
 @app_views.route('/branches/<branch_id>/atms', methods=['POST'], strict_slashes=False)
 def create_atm(branch_id):
