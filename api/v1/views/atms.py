@@ -3,7 +3,7 @@
 from flask import jsonify, abort, make_response, request
 from api.v1.views import app_views
 from models import storage
-from models.engine.db_storage import ATM, Branch
+from models.engine.db_storage import ATM, Branch, Region
 
 
 @app_views.route('/branches/<branch_id>/atms', strict_slashes=False)
@@ -26,9 +26,17 @@ def get_atmss():
     Retrieves the list of all atm objects
     """
     all_atms = storage.all(ATM).values()
+    all_regions = storage.all(Region).values()
     list_atms = []
+
     for atm in all_atms:
-        list_atms.append(atm.to_dict())
+        new_dict = atm.to_dict()
+        for region in all_regions:
+            for branch in region.branches:
+                if atm.branchId == branch.branchId:
+                    regionName = region.regionName
+        new_dict["regionName"] = regionName
+        list_atms.append(new_dict)
     return jsonify(list_atms)
 
 
@@ -38,9 +46,16 @@ def get_atm(atm_id):
     Retrieves a specific atm
     """
     atm = storage.get(ATM, atm_id)
+    all_regions = storage.all(Region).values()
     if not atm:
         abort(404)
-    return jsonify(atm.to_dict())
+    new_dict = atm.to_dict()
+    for region in all_regions:
+        for branch in region.branches:
+            if atm.branchId == branch.branchId:
+                regionName = region.regionName
+    new_dict["regionName"] = regionName
+    return jsonify(new_dict)
 
 
 @app_views.route('/atms/<atm_id>', methods=['DELETE'], strict_slashes=False)

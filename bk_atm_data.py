@@ -32,14 +32,12 @@ import os
 import sys
 
 # Replace with your actual database connection details
-
 connection_string = f"mysql+mysqldb://{os.environ.get('DB_USER')}:{os.environ.get('DB_PASSWORD')}@{os.environ.get('DB_HOST')}/{os.environ.get('DB_NAME')}"
 
 engine = create_engine(
     connection_string,
     pool_pre_ping=True,
 )
-
 # declarative base class
 class Base(DeclarativeBase):
     pass
@@ -56,14 +54,25 @@ class BaseModel():
         return new_dict
 
 # Define table models reflecting your database schema
+
 class Region(Base, BaseModel):
     __tablename__ = "Region"
 
     id = Column(Integer, primary_key=True)
     regionName = Column(String(50))
-    
-    #add relationship with Branch 
+
+    #add relationship with Branch
     branches = relationship("Branch", backref='region')
+
+    @property
+    def branches(self):
+        """ getter for list of branches related to the region"""
+        branch_list = []
+        from models import storage
+        for branch in storage.all(Branch).values():
+            if branch.regionId == self.id:
+                branch_list.append(branch)
+        return branch_list
 
 
 class Branch(Base, BaseModel):
@@ -73,13 +82,27 @@ class Branch(Base, BaseModel):
     branchName = Column(String(50))
     regionId = Column(Integer, ForeignKey(Region.id))
 
+    #add relationship with ATM
+    atms_b = relationship("ATM", backref='branch')
+
+    @property
+    def atms_b(self):
+        """ getter for list of atms related to the branch"""
+        atm_list = []
+        from models import storage
+        for atm in storage.all(ATM).values():
+            if atm.branchId == self.branchId:
+                atm_list.append(atm)
+        return atm_list
+
+
     def __repr__(self):
         return f"Branch(branchId={self.branchId}, \
             branchName='{self.branchName}', \
                 regionId={self.regionId})"
 
 
-class Group(Base):
+class Group(Base, BaseModel):
     __tablename__ = "Group"
 
     groupId = Column(Integer, primary_key=True)
@@ -87,7 +110,18 @@ class Group(Base):
     groupDescription = Column(String(5000))
     groupType = Column(Enum("Static", "Dynamic"))
 
+    #add relationship with ATM
     atms = relationship("ATM", secondary="group_atm", backref="groups")
+
+    @property
+    def atms_g(self):
+        """ getter for list of atms related to the group"""
+        atm_list = []
+        from models import storage
+        for atm in storage.all(ATM).values():
+            if atm.groupId == self.groupId:
+                atm_list.append(atm)
+        return atm_list
 
     def __repr__(self):
         return (
@@ -96,13 +130,16 @@ class Group(Base):
         )
 
 
-class Device(Base):
+class Device(Base, BaseModel):
     __tablename__ = "Device"
 
     deviceId = Column(Integer, primary_key=True)
     deviceModel = Column(String(100))  # Adjust length as needed
     deviceManufacturer = Column(String(100))  # Adjust length as needed
     deviceSerialNumber = Column(String(50))  # Adjust length as needed
+
+    # add relationship with AtmDevice
+    atms_d = relationship("AtmDevice", backref="device")
 
     def __repr__(self):
         return f"Device(deviceId={self.deviceId}, \
@@ -111,7 +148,7 @@ class Device(Base):
                         deviceSerialNumber='{self.deviceSerialNumber}')"
 
 
-class ATM(Base):
+class ATM(Base, BaseModel):
     __tablename__ = "ATM"
 
     atmId = Column(Integer, primary_key=True)
@@ -129,8 +166,12 @@ class ATM(Base):
     software_version = Column(String(50))
     uptime = Column(Integer)
 
+    #add relationship with electronicJournal
+    eljournals = relationship("ElectronicJournal", backref="atm_elj") 
+
     # Relationship with AtmDevice
     devices = relationship("AtmDevice", backref="atm")
+    
 
     def __repr__(self):
         return f"ATM(atmId={self.atmId}, \
@@ -143,14 +184,13 @@ class ATM(Base):
 group_atm = Table(
     "group_atm",
     Base.metadata,
-    Column("groupId", Integer, ForeignKey("Group.groupId")),
-    Column("atmId", Integer, ForeignKey("ATM.atmId")),
+    Column("groupId", Integer, ForeignKey("Group.groupId"), primary_key=True),
+    Column("atmId", Integer, ForeignKey("ATM.atmId"), primary_key=True),
 )
 
 
-class AtmDevice(Base):
+class AtmDevice(Base, BaseModel):
     __tablename__ = "AtmDevice"
-
     id = Column(Integer, primary_key=True, autoincrement=True)
     atmId = Column(Integer, ForeignKey(ATM.atmId), primary_key=True)
     deviceId = Column(Integer, ForeignKey(Device.deviceId), primary_key=True)
@@ -162,7 +202,7 @@ class AtmDevice(Base):
                 deviceStatus='{self.deviceStatus}')"
 
 
-class ElectronicJournal(Base):
+class ElectronicJournal(Base, BaseModel):
     __tablename__ = "ElectronicJournal"
 
     ejId = Column(Integer, primary_key=True)
@@ -171,7 +211,34 @@ class ElectronicJournal(Base):
     timestamp = Column(String(100), nullable=False)
 
     # Relationship with ATM table
-    atm = relationship("ATM", backref="electronic_journals")
+    #atm = relationship("ATM", backref="electronic_journals")
+    
+    #add relationship with Event table
+    events = relationship("Event", backref="elj")
+    
+    #add relationship with Transaction table
+    transactions = relationship("Transaction", backref="elj_t")
+
+    @property
+    def events(self):
+        """ getter for list of events related to the elctronic journal"""
+        event_list = []
+        from models import storage
+        for event in storage.all(Event).values():
+            if event.ejId == self.ejId:
+                event_list.append(event)
+        return event_list 
+
+    @property
+    def transactions(self):
+        """ getter for list of transactions related to the elctronic journal"""
+        transaction_list = []
+        from models import storage
+        for transaction in storage.all(Transaction).values():
+            if transaction.ejId == self.ejId:
+                transaction_list.append(transaction)
+        return transaction_list
+
 
     def __repr__(self):
         return f"<ElectronicJournal(ejId={self.ejId}, \
@@ -179,7 +246,7 @@ class ElectronicJournal(Base):
                         timestamp={self.timestamp})>"
 
 
-class Event(Base):
+class Event(Base, BaseModel):
     __tablename__ = "Event"
 
     eventId = Column(Integer, primary_key=True)
@@ -189,7 +256,7 @@ class Event(Base):
     ejId = Column(Integer, ForeignKey("ElectronicJournal.ejId"))
 
     # Relationship with ElectronicJournal table
-    electronic_journal = relationship("ElectronicJournal", backref="events")
+    #electronic_journal = relationship("ElectronicJournal", backref="events")
 
     def __repr__(self):
         return f"<Event(eventId={self.eventId},\
@@ -198,7 +265,7 @@ class Event(Base):
                 ejId={self.ejId})>"
 
 
-class Transaction(Base):
+class Transaction(Base, BaseModel):
     __tablename__ = "Transaction"
 
     transactionId = Column(Integer, primary_key=True)
@@ -207,15 +274,14 @@ class Transaction(Base):
     ejId = Column(Integer, ForeignKey("ElectronicJournal.ejId"))
 
     # Relationship with ElectronicJournal table
-    electronic_journal = relationship("ElectronicJournal",
-                                      backref="transactions")
+    #electronic_journal = relationship("ElectronicJournal",
+    #                                  backref="transactions")
 
     def __repr__(self):
         return f"<Transaction(transactionId={self.transactionId}, \
                     transactionType={self.transactionType}, \
                     transactionDetail={self.transactionDetail}, \
                     ejId={self.ejId})>"
-
 
 # Create all tables in the database (comment out if tables already exist)
 
@@ -233,7 +299,6 @@ with sessionmaker(bind=engine)() as session:
     for table_name, table_data in data.items():
         # Get the corresponding table model class
         table_model = getattr(sys.modules[__name__], table_name)
-        print(sys.modules[__name__].__dict__)
 
         # Insert data into the table
         for row in table_data:

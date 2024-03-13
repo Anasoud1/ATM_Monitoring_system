@@ -238,19 +238,46 @@
             </div>
         </nav>
         <!-- END SIDEBAR-->
-	<div class="content-wrapper">
+        <div class="content-wrapper">
             <!-- START PAGE CONTENT-->
             <div class="page-content fade-in-up">
                 
+                <div class="row" style="justify-content: space-around;">
+                    <div class="col-lg-4">
+                        <div class="ibox">
+                            <div class="ibox-head">
+                                <div class="ibox-title">Network Status</div>
+                            </div>
+                            <div class="ibox-body">
+                                <div class="row align-items-center">
+                                    
+                                    <canvas id="myChart1" style="width:100%;max-width:600px"></canvas>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="ibox">
+                            <div class="ibox-head">
+                                <div class="ibox-title">Cash Status</div>
+                            </div>
+                            <div class="ibox-body">
+                                <div class="row align-items-center">
+                                    
+                                    <canvas id="myChart2" style="width:100%;max-width:600px"></canvas>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-lg">
                         <div class="ibox">
                             <div class="ibox-head">
-                                <div class="ibox-title">{{ grp.groupName }}</div>
+                                <div class="ibox-title">ATMs</div>
                             </div>
-                            
-                            <div class="ibox-title" style="padding: 20px 20px 0; line-height: 1.6;"><strong>Description:</strong> "{{ grp.groupDescription}}"</div>
-                            
                             <div class="ibox-body">
                                 <table class="table table-striped m-t-20 visitors-table">
                                     <thead>
@@ -263,32 +290,34 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-					{% for atm in grp.atms_g %}
+					{% for atm in atms %}
                                         <tr>
-                                            <td>{{ atm.atmId }}</a></td>
-                                            <td>{{ atm.atmName }}</td>
+						<td><a href="http://192.168.1.113:5001/atms/{{atm.atmId}}">{{ atm.atmId }}</a></td>
+					    <td>{{ atm.atmName }}</td>
                                             <td>
-					    {% if atm.status == "Online" %}
-                                                <i class='fa fa-toggle-on green-toggle'></i>
-					    {% else %}
-						<i class='fa fa-toggle-on red-toggle'></i>
-					    {% endif%}
+						{% if atm.status == "Online" %}
+                                                   <i class='fa fa-toggle-on green-toggle'></i>
+						{% else %}
+						   <i class='fa fa-toggle-on red-toggle'></i>
+						{% endif %}
                                             </td>
                                             <td>atm.cash_level</td>
-                                            <td>atm.last_cash_replenishment</td>
+                                            <td>atm.last_cash_replenishement</td>
                                         </tr>
 					{% endfor %}
+                                        
                                     </tbody>
                                 </table>
                             </div>
                             
                         </div>
-
-                        
                     </div>
                     
                 </div>
                 <style>
+		    .collapse span, .collapse li a{
+			font-size: 12px;
+		    }
                     .table tr {
                         display: flex;
                         justify-content: space-between;
@@ -309,7 +338,20 @@
                         margin-top: 20px;
                         margin-bottom: 30px;
                     }
-                    
+                    /*
+                    .visitors-table tbody tr td:last-child {
+                        display: flex;
+                        align-items: center;
+                    }
+
+                    .visitors-table .progress {
+                        flex: 1;
+                    }
+
+                    .visitors-table .progress-parcent {
+                        text-align: right;
+                        margin-left: 10px;
+                    }*/
                 </style>
             </div>
             <!-- END PAGE CONTENT-->
@@ -318,8 +360,7 @@
                 <a class="px-4" href="http://themeforest.net/item/adminca-responsive-bootstrap-4-3-angular-4-admin-dashboard-template/20912589" target="_blank">BUY PREMIUM</a>
                 <div class="to-top"><i class="fa fa-angle-double-up"></i></div>
             </footer>
-        </div>	
-
+        </div>
     </div>
     <!-- BEGIN THEME CONFIG PANEL-->
     <div class="theme-config">

@@ -97,6 +97,25 @@ class Branch(Base, BaseModel):
                 atm_list.append(atm)
         return atm_list
 
+    '''
+    def to_dict(self):
+        """
+        returns a dictionary containing all keys/values of the instance"
+        """
+
+        
+        
+        print("herrrre")
+        new_dict = self.__dict__.copy()
+        list_atms = []
+        for atm in self.atms_b:
+            list_atms.append(atm.to_dict())
+        new_dict["atms"] = list_atms
+        if "_sa_instance_state" in new_dict:
+            del new_dict["_sa_instance_state"]
+        print("*****", new_dict,"*****")
+        return new_dict
+    '''
 
     def __repr__(self):
         return f"Branch(branchId={self.branchId}, \
@@ -113,7 +132,7 @@ class Group(Base, BaseModel):
     groupType = Column(Enum("Static", "Dynamic"))
 
     #add relationship with ATM
-    atms = relationship("ATM", secondary="group_atm", backref="groups")
+    atms_g = relationship("ATM", secondary="group_atm", backref="groups")
 
     @property
     def atms_g(self):

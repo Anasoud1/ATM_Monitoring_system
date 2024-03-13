@@ -189,7 +189,7 @@
                 </div>
                 <ul class="side-menu metismenu">
                     <li>
-                        <a class="active" href="index.html"><i class="sidebar-item-icon fa fa-th-large"></i>
+                        <a class="active" href="http://192.168.1.113:5001/"><i class="sidebar-item-icon fa fa-th-large"></i>
                             <span class="nav-label">Dashboard</span>
                         </a>
                     </li>
@@ -205,7 +205,7 @@
 				{% for atm in branch.atms %}
                                 <ul class="nav-3-level collapse">
                                     <li>
-					<a href="http://192.168.1.113:5001/atms/{{atm.atmId}}" style="font-size: 12px">{{ atm.atmName }}</a>
+					    <a href="http://192.168.1.113:5001/atms/{{atm.atmId}}" style="font-size: 12px">{{ atm.atmName }}</a>
                                     </li>
                                 </ul>
 				{% endfor %}
@@ -242,74 +242,152 @@
             <!-- START PAGE CONTENT-->
             <div class="page-content fade-in-up">
                 
-                <div class="row">
-                    <div class="col-lg">
+                <div class="row" style="justify-content: space-around;">
+                    <div class="col-sm-5">
                         <div class="ibox">
                             <div class="ibox-head">
-                                <div class="ibox-title">{{ grp.groupName }}</div>
+                                <div class="ibox-title">ATM Information</div>
                             </div>
-                            
-                            <div class="ibox-title" style="padding: 20px 20px 0; line-height: 1.6;"><strong>Description:</strong> "{{ grp.groupDescription}}"</div>
-                            
                             <div class="ibox-body">
-                                <table class="table table-striped m-t-20 visitors-table">
-                                    <thead>
-                                        <tr>
-                                            <th>ATM ID</th>
-                                            <th>ATM Name</th>
-                                            <th>Status</th>
-                                            <th>Cash balance</th>
-                                            <th>Date/Time</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-					{% for atm in grp.atms_g %}
-                                        <tr>
-                                            <td>{{ atm.atmId }}</a></td>
-                                            <td>{{ atm.atmName }}</td>
-                                            <td>
-					    {% if atm.status == "Online" %}
-                                                <i class='fa fa-toggle-on green-toggle'></i>
-					    {% else %}
-						<i class='fa fa-toggle-on red-toggle'></i>
-					    {% endif%}
-                                            </td>
-                                            <td>atm.cash_level</td>
-                                            <td>atm.last_cash_replenishment</td>
-                                        </tr>
-					{% endfor %}
-                                    </tbody>
-                                </table>
+                                <div class="row" style="justify-content: space-around;">
+                                    <div class="col-sm-4">
+                                        <strong>ATM ID</strong>
+                                    </div>
+                                        
+                                    <div class="col-sm-4">
+					    <span>{{ atm.atmId }}</span>
+                                    </div>
+                                </div>
+                                <div class="row" style="justify-content: space-around;">
+                                    <div class="col-sm-4">
+                                        <strong>ATM Name</strong>
+                                    </div>
+                                        
+                                    <div class="col-sm-4">
+					    <span>{{ atm.atmName }}</span>
+                                    </div>
+                                </div>
+                                <div class="row" style="justify-content: space-around;">
+                                    <div class="col-sm-4">
+                                        <strong>Network Address</strong>
+                                    </div>
+                                        
+                                    <div class="col-sm-4">
+					    <span>{{ atm.networkAddress }}</span>
+                                    </div>
+                                </div>
+                                <div class="row" style="justify-content: space-around;">
+                                    <div class="col-sm-4">
+                                        <strong>Latitude</strong>
+                                    </div>
+                                        
+                                    <div class="col-sm-4">
+					    <span>{{ atm.latitude }}</span>
+                                    </div>
+                                </div>
+                                <div class="row" style="justify-content: space-around;">
+                                    <div class="col-sm-4">
+                                        <strong>Longitude</strong>
+                                    </div>
+                                        
+                                    <div class="col-sm-4">
+					    <span>{{ atm.longitude }}</span>
+                                    </div>
+                                </div>
+                                <div class="row" style="justify-content: space-around;">
+                                    <div class="col-sm-4">
+                                        <strong>Timezone</strong>
+                                    </div>
+                                        
+                                    <div class="col-sm-4">
+					    <span>{{ atm.timezone }}</span>
+                                    </div>
+                                </div>
+                                <div class="row" style="justify-content: space-around;">
+                                    <div class="col-sm-4">
+                                        <strong>Subnet</strong>
+                                    </div>
+                                        
+                                    <div class="col-sm-4">
+					    <span>{{ atm.subnet }}</span>
+                                    </div>
+                                </div>
+                                <div class="row" style="justify-content: space-around;">
+                                    <div class="col-sm-4">
+                                        <strong>Cash balance</strong>
+                                    </div>
+                                        
+                                    <div class="col-sm-4">
+					    <span>{{ atm.cash_level }}</span>
+                                    </div>
+                                </div>
+                                <div class="row" style="justify-content: space-around;">
+                                    <div class="col-sm-4">
+                                        <strong>Status</strong>
+                                    </div>
+                                        
+                                    <div class="col-sm-4">
+					    <span>{{ atm.status }}</span>
+                                    </div>
+                                </div>
+                                <div class="row" style="justify-content: space-around;">
+                                    <div class="col-sm-4">
+                                        <strong>Region</strong>
+                                    </div>
+                                        
+                                    <div class="col-sm-4">
+					 <span>{{ atm.regionName }}</span>
+                                    </div>
+                                </div>
                             </div>
-                            
                         </div>
-
                         
                     </div>
-                    
+                    <div class="col-sm-5">
+                        <div class="ibox">
+                            <div class="ibox-head">
+                                <div class="ibox-title">Location</div>
+                            </div>
+                            <div class="ibox-body">
+                                <div id="googleMap" style="width:100%;height:420px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="justify-content: center;">
+                    <div class="ibox" style="width: 90%;">
+                        <div class="ibox-head">
+                            <div class="ibox-title">Transaction</div>
+                        </div>
+                        <div class="ibox-body">
+                            <canvas id="myChart" style="width:100%;"></canvas>
+                        </div>
+                    </div>
                 </div>
                 <style>
-                    .table tr {
-                        display: flex;
-                        justify-content: space-between;
-                    }
-                    .table td, .table th {
-                        flex: 1;
-                    }
-                    .green-toggle {
-                        color: green;
-                        font-size: 24px;
-                    }
-                    .red-toggle {
-                        color: red;
-                        font-size: 24px;
-                        transform: rotate(180deg);
-                    }
                     .row{
                         margin-top: 20px;
                         margin-bottom: 30px;
+                        
                     }
-                    
+                    .ibox-body .row {
+                        margin-top: 10px;
+                        margin-bottom: 20px;
+                    }
+                    /*
+                    .visitors-table tbody tr td:last-child {
+                        display: flex;
+                        align-items: center;
+                    }
+
+                    .visitors-table .progress {
+                        flex: 1;
+                    }
+
+                    .visitors-table .progress-parcent {
+                        text-align: right;
+                        margin-left: 10px;
+                    }*/
                 </style>
             </div>
             <!-- END PAGE CONTENT-->
@@ -318,8 +396,7 @@
                 <a class="px-4" href="http://themeforest.net/item/adminca-responsive-bootstrap-4-3-angular-4-admin-dashboard-template/20912589" target="_blank">BUY PREMIUM</a>
                 <div class="to-top"><i class="fa fa-angle-double-up"></i></div>
             </footer>
-        </div>	
-
+        </div>
     </div>
     <!-- BEGIN THEME CONFIG PANEL-->
     <div class="theme-config">

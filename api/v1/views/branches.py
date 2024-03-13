@@ -14,7 +14,12 @@ def get_branches():
     all_branches = storage.all(Branch).values()
     list_branches = []
     for branch in all_branches:
-        list_branches.append(branch.to_dict())
+        list_atms = []
+        for atm in branch.atms_b:
+            list_atms.append(atm.to_dict())
+        new_dict = branch.to_dict()
+        new_dict["atms"] = list_atms
+        list_branches.append(new_dict)
     return jsonify(list_branches)
 
 
