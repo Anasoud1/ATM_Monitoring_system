@@ -536,6 +536,19 @@
     <!-- END PAGA BACKDROPS-->
     <!-- Chart canva -->
     <script>
+	function myMap() {
+	const myLatLng = { lat: -25.363, lng: 131.044 };
+        var mapProp= {
+        center:new google.maps.LatLng(31.6295,7.9811),
+        zoom:5,
+        };
+        var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+	new google.maps.Marker({
+    	position: myLatLng,
+    	map,
+    	title: "Hello World!",
+  	});			    
+        }	
         const xValues = ["inService", "outOfService", "lostComm"];
         const yValues = [75, 15, 10];
         const barColors = [
@@ -571,6 +584,7 @@
         });
         </script>
     <!-- CORE PLUGINS-->
+    <script src="https://maps.googleapis.com/maps/api/js?key=&callback=myMap"></script>
     <script src="../static/assets/vendors/jquery/dist/jquery.min.js" type="text/javascript"></script>
     <script src="../static/assets/vendors/popper.js/dist/umd/popper.min.js" type="text/javascript"></script>
     <script src="../static/assets/vendors/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
