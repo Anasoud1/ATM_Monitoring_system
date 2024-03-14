@@ -24,9 +24,14 @@ def get_grou(group_id):
     Retrieves a specific group
     """
     group = storage.get(Group, group_id)
+    list_atms = []
+    for atm in group.atms_g:
+        list_atms.append(atm.to_dict())
     if not group:
         abort(404)
-    return jsonify(group.to_dict())
+    new_dict = group.to_dict()
+    new_dict["atms"] = list_atms
+    return jsonify(new_dict)
 
 
 @app_views.route('/groups/<group_id>', methods=['DELETE'], strict_slashes=False)

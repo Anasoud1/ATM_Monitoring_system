@@ -4,7 +4,7 @@ from models import storage
 from flask import Flask, render_template
 import requests
 from api.v1.app import app
-from models.engine.db_storage import Group
+
 
 app2 = Flask(__name__)
 
@@ -65,7 +65,27 @@ def group(group_id):
     grp = response5.json()
     return render_template('group.html', branches=branches, atms=atms, groups=groups, grp=grp)
 
+@app2.route('/transactions/<ej_id>', strict_slashes=False)
+def transaction(ej_id):
+    '''return a specific atm'''
+    url = "http://0.0.0.0:5000/api/v1/branches"
+    url2 = "http://0.0.0.0:5000/api/v1/atms"
+    url3 = "http://0.0.0.0:5000/api/v1/atms/{}".format(ej_id)
+    url4 = "http://0.0.0.0:5000/api/v1/groups"
+    url5 = "http://0.0.0.0:5000/api/v1/eljs/{}/transactions".format(ej_id)
+    response = requests.get(url)
+    response2 = requests.get(url2)
+    response3 = requests.get(url3)
+    response4 = requests.get(url4)
+    response5 = requests.get(url5)
+
+    branches = response.json()
+    atms = response2.json()
+    atm = response3.json()
+    groups = response4.json()
+    transactions = response5.json()
+    return render_template('transaction.html', branches=branches, atms=atms, groups=groups, atm=atm, transactions=transactions)
+
 if __name__ == "__main__":
     """ Main Function """
-    #app.run(host='0.0.0.0', port=5000)
     app2.run(host='0.0.0.0', port=5001)

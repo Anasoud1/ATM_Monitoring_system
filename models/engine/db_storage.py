@@ -8,19 +8,16 @@ import models
 from os import getenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
-'''
 from models.base_model import Base
-from models.atm import Atm
+from models.atm import ATM
 from models.atmdevice import AtmDevice
 from models.branch import Branch
 from models.device import Device
 from models.event import Event
 from models.region import Region
-from models.electrinicjournal import ElectronicJournal
+from models.electronic_journal import ElectronicJournal
 from models.transaction import Transaction
 from models.group import Group
-'''
-from atm_data_seeder import Base, Region, Branch, Group, Device, ATM, AtmDevice, ElectronicJournal, Event, Transaction
 
 
 class DBStorage:
