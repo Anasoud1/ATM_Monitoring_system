@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Devide class"""
+"""Device class"""
 
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer
