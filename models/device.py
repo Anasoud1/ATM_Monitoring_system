@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""class device"""
+"""Device class"""
 
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer
@@ -10,8 +10,6 @@ class Device(Base, BaseModel):
     __tablename__ = "Device"
 
     deviceId = Column(Integer, primary_key=True)
-    deviceModel = Column(String(100))
-    deviceManufacturer = Column(String(100))
-    deviceSerialNumber = Column(String(50))
+    deviceName = Column(String())
 
     atms_d = relationship("AtmDevice", backref="device")
