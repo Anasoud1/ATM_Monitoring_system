@@ -9,7 +9,9 @@ from sqlalchemy.orm import relationship
 class AtmDevice(Base, BaseModel):
     __tablename__ = "AtmDevice"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    atmId = Column(Integer, ForeignKey('ATM.atmId'), primary_key=True)
-    deviceId = Column(Integer, ForeignKey('Device.deviceId'), primary_key=True)
-    deviceStatus = Column(String(20))
+    atm_id = Column(Integer, ForeignKey('ATM.atmId'), primary_key=True)
+    atm = relationship("ATM")
+    device_Id = Column(Integer, ForeignKey('Device.deviceId'), primary_key=True)
+    device = relationship("Device")
+
+    deviceStatus = Column(String(50))
