@@ -249,6 +249,13 @@
                     <li>
                         <a href="javascript:;"><i class="sidebar-item-icon fa fa-exchange"></i>
                             <span class="nav-label">Transactions</span><i class="fa fa-angle-left arrow"></i></a>
+			{% for atm in atms %}
+                                <ul class="nav-2-level collapse">
+                                    <li>
+                                        <a href="http://192.168.1.113:5001/transactions/{{atm.atmId}}" style="font-size: 12px">{{ atm.atmName }}</a>
+                                    </li>
+                                </ul>
+                         {% endfor %}
                     </li>
                     <li>
                         <a href="javascript:;"><i class="sidebar-item-icon fa fa-map-marker"></i>
