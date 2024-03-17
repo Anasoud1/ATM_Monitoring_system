@@ -272,16 +272,42 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" style="justify-content: center;">
-                    <div class="ibox" style="width: 90%;">
-                        <div class="ibox-head">
-                            <div class="ibox-title">Transaction</div>
+
+		<div class="row" style="justify-content: space-around;">
+                    <div class="col-sm-5">
+                        <div class="ibox">
+                            <div class="ibox-head">
+                                <div class="ibox-title">ATM Devices</div>
+                            </div>
+                            <div class="ibox-body">
+
+				{% for deviceName, status in devices.items() %}
+                                <div class="row" style="justify-content: space-around;">
+                                    <div class="col-sm-4">
+					    <strong>{{ deviceName }}</strong>
+                                    </div>
+                                        
+                                    <div class="col-sm-4">
+					    <span>{{ status }}</span>
+                                    </div>
+                                </div>
+                              	{% endfor %} 
+                            </div>
                         </div>
-                        <div class="ibox-body">
-                            <canvas id="myChart" style="width:100%;"></canvas>
+                        
+                    </div>
+                    <div class="col-sm-5">
+                        <div class="ibox">
+                            <div class="ibox-head">
+                                <div class="ibox-title">Transaction</div>
+                            </div>
+                            <div class="ibox-body">
+                                <canvas id="myChart1" style="width:100%;max-width:600px"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
+
                 <style>
                     .row{
                         margin-top: 20px;
@@ -465,13 +491,14 @@
     	title: "Hello World!",
   	});			    
         }	
-        const xValues = ["inService", "outOfService", "lostComm"];
-        const yValues = [75, 15, 10];
+	
+	const xValues = ["Withdrawal", "Transfer", "Balance Inquiry", "Deposit"];
+        const yValues =  [60, 15, 5, 20];
         const barColors = [
-          "#2ecc71",
-          "#e74c3c",
-          "#f39c12",
-          
+          "rgb(54, 162, 235)",
+          "#2976ab",
+          "rgb(255, 205, 86)",
+          "rgb(255, 99, 132)"
         ];
         
         new Chart("myChart1", {
@@ -484,20 +511,7 @@
             }]
           },
         });
-
-        const x = ["Cash Available", "Out of Cash", "Cash Low"];
-        const y = [70, 10, 20];
-
-        new Chart("myChart2", {
-          type: "doughnut",
-          data: {
-            labels: x,
-            datasets: [{
-              backgroundColor: barColors,
-              data: y
-            }]
-          },
-        });
+	
         </script>
     <!-- CORE PLUGINS-->
     <script src="https://maps.googleapis.com/maps/api/js?key=&callback=myMap"></script>

@@ -10,7 +10,7 @@ class Device(Base, BaseModel):
     __tablename__ = "Device"
 
     deviceId = Column(Integer, primary_key=True)
-    deviceName = Column(String(50))
+    #deviceName = Column(String(50))
     deviceModel = Column(String(100))
     deviceManufacturer = Column(String(100))
     deviceSerialNumber = Column(String(50))

@@ -9,7 +9,7 @@ class ATMCassette(Base):
     __tablename__ = 'atm_cassettes'
 
     id = Column(Integer, primary_key=True)
-    cassette_num = Colum(Integer)
+    cassette_num = Column(Integer)
     denomination = Column(Integer)
-    cassete_type = Columm(String(50))
+    cassete_type = Column(String(50))
     num_bills = Column(Integer)
