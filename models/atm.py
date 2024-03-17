@@ -28,4 +28,4 @@ class ATM(Base, BaseModel):
     eljournals = relationship("ElectronicJournal", backref="atm_elj") 
 
     # Relationship with AtmDevice
-    devices = relationship("AtmDevice", backref="atm")
+    #devices = relationship("AtmDevice", backref="atm")

@@ -11,10 +11,12 @@ def get_groups():
     """
     Retrieves the list of all group objects
     """
+    print("enter here")
     all_groups = storage.all(Group).values()
     list_groups = []
     for group in all_groups:
         list_groups.append(group.to_dict())
+    print("ending")
     return jsonify(list_groups)
 
 
