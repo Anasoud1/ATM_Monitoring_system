@@ -18,7 +18,7 @@ from models.region import Region
 from models.electronic_journal import ElectronicJournal
 from models.transaction import Transaction
 from models.group import Group
-fron models.atm_cassette import ATMCassette
+from models.atm_cassette import ATMCassette
 
 
 class DBStorage:
