@@ -2,6 +2,7 @@
 """class atm"""
 
 from models.base_model import BaseModel, Base
+from models.atmdevice import AtmDevice
 from sqlalchemy import Column, String, ForeignKey, Enum, Integer, Float, DECIMAL
 from sqlalchemy.orm import relationship
 
@@ -29,3 +30,12 @@ class ATM(Base, BaseModel):
 
     # Relationship with AtmDevice
     #devices = relationship("AtmDevice", backref="atm")
+
+    @property
+    def cash_level(self):
+        '''getter for cash_level'''
+        from models import storage
+        for atm in storage.all(AtmDevice).values():
+            if atm.deviceId == 1 and atm.atmId == self.atmId:
+                return atm.calculate_cash()
+        return 0

@@ -27,9 +27,27 @@ def get_transactions():
     """
     all_transactions = storage.all(Transaction).values()
     list_transactions = []
+    new = {}
+    w = 0
+    d = 0
+    t = 0
+    b = 0
     for transaction in all_transactions:
-        list_transactions.append(transaction.to_dict())
-    return jsonify(list_transactions)
+        #list_transactions.append(transaction.to_dict())
+        if transaction.transactionType == "Withdrawal":
+            w += 1
+        elif transaction.transactionType == "Deposit":
+            d += 1
+        elif transaction.transactionType == "Balance Inquiry":
+            b += 1
+        elif transaction.transactionType == "Transfer":
+            t += 1
+    total = w + d + b + t
+    new["withdrawal"] = int((w / total) * 100)
+    new["deposit"] = int((d / total) * 100)
+    new["balanceInquiry"] = int((b / total) * 100)
+    new["transfer"] = int((t / total) * 100)
+    return jsonify(new)
 
 
 @app_views.route('/transactions/<transaction_id>', strict_slashes=False)

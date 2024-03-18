@@ -48,7 +48,7 @@ class DBStorage:
         """
         obj_dict = {}
         objs_list = [Group, Transaction, ElectronicJournal, Region, Event, Device, Branch, AtmDevice, ATM]
-        dict_id = {'Group': 'groupId', 'Transaction': 'transactionId', 'ElectronicJournal': 'ejId', 'Region': 'id', 'Event': 'eventId', 'Device': 'deviceId', 'Branch': 'branchId', 'ATM': 'atmId', "AtmDevice": 'id'}
+        dict_id = {'Group': 'groupId', 'Transaction': 'transactionId', 'ElectronicJournal': 'ejId', 'Region': 'id', 'Event': 'eventId', 'Device': 'deviceId', 'Branch': 'branchId', 'ATM': 'atmId', "AtmDevice": 'id', "ATMCassette": "id"}
         objs = []
         if cls is not None:
             objs.extend(self.__session.query(cls).all())
@@ -105,7 +105,7 @@ class DBStorage:
         None if not found
         """
         objs_list = [Group, Transaction, ElectronicJournal, Region, Event, Device, Branch, AtmDevice, ATM]
-        dict_id = {'Group': 'groupId', 'Transaction': 'transactionId', 'ElectronicJournal': 'ejId', 'Region': 'id', 'Event': 'eventId', 'Device': 'deviceId', 'Branch': 'branchId', 'ATM': 'atmId'}
+        dict_id = {'Group': 'groupId', 'Transaction': 'transactionId', 'ElectronicJournal': 'ejId', 'Region': 'id', 'Event': 'eventId', 'Device': 'deviceId', 'Branch': 'branchId', 'ATM': 'atmId', "ATMCassette": "id"}
         if cls not in objs_list:
             return None
         dict_obj = models.storage.all(cls)

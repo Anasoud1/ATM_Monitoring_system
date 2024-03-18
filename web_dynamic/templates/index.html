@@ -167,8 +167,15 @@
                             <div class="ibox-body">
                                 <div class="row align-items-center">
                                     
-                                    <canvas id="myChart1" style="width:100%;max-width:600px"></canvas>
-                                    
+				   <div class="col-md-6">
+                                        <canvas id="myChart1" style="height:160px;"></canvas>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="m-b-20 blue"><i class="fa fa-circle-o m-r-10"></i>inService</div>
+                                        <div class="m-b-20 yellow"><i class="fa fa-circle-o m-r-10"></i>outOfService</div>
+                                        <div class="m-b-20 red"><i class="fa fa-circle-o m-r-10"></i>lostComm</div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -180,9 +187,37 @@
                             </div>
                             <div class="ibox-body">
                                 <div class="row align-items-center">
+                                    <div class="col-md-6">
+                                        <canvas id="myChart2" style="height:160px;"></canvas>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="m-b-20 blue"><i class="fa fa-circle-o m-r-10"></i>Cash Available</div>
+                                        <div class="m-b-20 yellow"><i class="fa fa-circle-o m-r-10"></i>Out of Cash</div>
+                                        <div class="m-b-20 red"><i class="fa fa-circle-o m-r-10"></i>Cash Low</div>
+                                    </div>
                                     
-                                    <canvas id="myChart2" style="width:100%;max-width:600px"></canvas>
-                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+		    <div class="col-lg-4">
+                        <div class="ibox">
+                            <div class="ibox-head">
+                                <div class="ibox-title">Transaction</div>
+                            </div>
+                            <div class="ibox-body">
+                                <div class="row align-items-center">
+
+				    <div class="col-md-6">
+                                        <canvas id="myChart3" style="height:160px;"></canvas>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="m-b-20 blue"><i class="fa fa-circle-o m-r-10"></i>Withdrawal</div>
+                                        <div class="m-b-20 yellow"><i class="fa fa-circle-o m-r-10"></i>Deposit</div>
+                                        <div class="m-b-20 red"><i class="fa fa-circle-o m-r-10"></i>Balance Inquiry</div>
+					<div class="m-b-20 darkBlue"><i class="fa fa-circle-o m-r-10"></i>Transfer</div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -217,6 +252,18 @@
 						   <i class='fa fa-toggle-on red-toggle'></i>
 						{% endif %}
                                             </td>
+					    <!--
+					    {% set found = false %}
+					    {% for c in cash %}
+					    	{% if atm.atmId == c.atmId %}
+					    		<td>{{ c.cash_balance }}</td>
+							{% set found = true %}
+					    	{%endif%}
+					    {% endfor %}
+					    {% if not found %}
+					    	<td> 0 </td>
+					    {% endif %}
+					    -->
 					    <td>{{ atm.cash_level }}</td>
 					    <td>{{ atm.last_cash_replenishment }}</td>
                                         </tr>
@@ -231,6 +278,18 @@
                     
                 </div>
                 <style>
+		    .blue {
+			color: rgb(54, 162, 235);	
+	            }
+		    .yellow {
+			color: rgb(255, 205, 86);
+		    }
+		    .red {
+			color: rgb(255, 99, 132);
+		    }
+		    .darkBlue {
+			color: #2976ab;
+		    }
 		    .collapse span, .collapse li a{
 			font-size: 12px;
 		    }
@@ -415,18 +474,18 @@
     <!-- Chart canva -->
     <script>
         const xValues = ["inService", "outOfService", "lostComm"];
-        const yValues = [75, 15, 10];
+	    const yValues = [{{ atms_chart.inService }}, {{ atms_chart.outOfService }}, {{ atms_chart.lostComm }}];
         const barColors = [
-          "#2ecc71",
-          "#e74c3c",
-          "#f39c12",
+          "rgb(54, 162, 235)",
+          "rgb(255, 205, 86)",
+          "rgb(255, 99, 132)",
+	  "#2976ab"
           
         ];
         
         new Chart("myChart1", {
           type: "doughnut",
           data: {
-            labels: xValues,
             datasets: [{
               backgroundColor: barColors,
               data: yValues
@@ -435,18 +494,31 @@
         });
 
         const x = ["Cash Available", "Out of Cash", "Cash Low"];
-        const y = [70, 10, 20];
+	    const y = [{{ atms_chart["Cash Available"] }}, {{ atms_chart["Out of Cash"] }}, {{ atms_chart["Cash Low"] }}];
 
         new Chart("myChart2", {
           type: "doughnut",
           data: {
-            labels: x,
             datasets: [{
               backgroundColor: barColors,
               data: y
             }]
           },
         });
+	
+	const x_v = ["Withdrawal", "Deposit", "Balance Inquiry", "Transfer"];
+        const y_v = [{{transactions.withdrawal}}, {{transactions.deposit}}, {{transactions.balanceInquiry}}, {{transactions.transfer}}];
+
+        new Chart("myChart3", {
+          type: "doughnut",
+          data: {
+            datasets: [{
+              backgroundColor: barColors,
+              data: y_v
+            }]
+          },
+        });
+	
         </script>
     <!-- CORE PLUGINS-->
     <script src="../static/assets/vendors/jquery/dist/jquery.min.js" type="text/javascript"></script>
