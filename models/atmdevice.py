@@ -12,9 +12,7 @@ class AtmDevice(Base, BaseModel):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     atmId = Column(Integer, ForeignKey('ATM.atmId'), primary_key=True)
-    #atm = relationship("ATM")
     deviceId = Column(Integer, ForeignKey('Device.deviceId'), primary_key=True)
-    #device = relationship("Device")
 
     deviceStatus = Column(String(50))
     
@@ -30,7 +28,7 @@ class AtmDevice(Base, BaseModel):
         return list_cass
 
     def calculate_cash(self):
-        """calculate level of cash in atm"""
+        """It calculates level of cash of an atm"""
         total_cash = 0
         for cass in self.cassettes:
             total_cash += cass.denomination * cass.num_bills 
