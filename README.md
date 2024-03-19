@@ -22,7 +22,7 @@ Looking ahead, I envision expanding the system's capabilities to incorporate pre
 
 ## Installation
 
-To get started with [Project Name], follow these steps:
+To get started with the ATM Monitoring System, follow these steps:
 
 1. Clone the repository: 
    ```bash
