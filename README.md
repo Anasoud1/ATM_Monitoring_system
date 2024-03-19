@@ -59,6 +59,16 @@ Explore these related projects that complement or provide additional functionali
 
     ATM Analytics Dashboard: A web-based dashboard that provides detailed analytics and insights into ATM performance, transaction trends, and user demographics.
 
+## Screenshots
+
+![image](https://github.com/Anasoud1/ATM_Monitoring_system/assets/21989692/d480dd6f-7457-41bf-b42f-1cfd5e1c512b)
+
+![image](https://github.com/Anasoud1/ATM_Monitoring_system/assets/21989692/63a35910-3e93-451a-aafc-f18f97968394)
+
+![image](https://github.com/Anasoud1/ATM_Monitoring_system/assets/21989692/9bcc9217-3151-45a1-9562-dcc53d2f8fdc)
+
+![image](https://github.com/Anasoud1/ATM_Monitoring_system/assets/21989692/3630f281-d23f-4f13-9859-86779f59e5fd)
+
 ## Licensing
 
 This project is licensed under the MIT License.
