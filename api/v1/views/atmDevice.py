@@ -13,6 +13,7 @@ def get_atm_devices(atm_id):
     """
     dict_devices = {}
     new_dict = {}
+    cash_balance = 0
     for atm in storage.all(AtmDevice).values():
         '''
         dic = atm.to_dict()
@@ -23,7 +24,9 @@ def get_atm_devices(atm_id):
         '''
         #print("**** dic:", atm.calculate_cash(), "id:", atm.atmId, "****")
         if str(atm.atmId) == atm_id:
-            cash_balance = atm.calculate_cash()
+            if atm.deviceId == 1:
+                cash_balance = atm.calculate_cash()
+                print("------", cash_balance, "-----")
             for device in storage.all(Device).values():
                 if device.deviceId == atm.deviceId:
                     dict_devices[device.deviceModel] = atm.deviceStatus

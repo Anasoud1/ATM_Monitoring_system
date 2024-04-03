@@ -26,7 +26,9 @@ def get_grou(group_id):
     group = storage.get(Group, group_id)
     list_atms = []
     for atm in group.atms_g:
-        list_atms.append(atm.to_dict())
+        new = atm.to_dict()
+        new["cash_level"] = atm.cash_level
+        list_atms.append(new)
     if not group:
         abort(404)
     new_dict = group.to_dict()

@@ -46,23 +46,26 @@ def atm(atm_id):
     url3 = "http://0.0.0.0:5000/api/v1/atms/{}".format(atm_id)
     url4 = "http://0.0.0.0:5000/api/v1/groups"
     url5 = "http://0.0.0.0:5000/api/v1/atms/{}/devices".format(atm_id)
+    url6 = "http://0.0.0.0:5000/api/v1/transaction_chart/{}".format(atm_id)
 
     response = requests.get(url)
     response2 = requests.get(url2)
     response3 = requests.get(url3)
     response4 = requests.get(url4)
     response5 = requests.get(url5)
+    response6 = requests.get(url6)
 
     branches = response.json()
     atms = response2.json()
     atm = response3.json()
     groups = response4.json()
     device = response5.json()
+    trans = response6.json()
 
     cash_balance = device["cash_balance"]
     devices = device["devices"]
-    print("***", type(devices), devices , "****")
-    return render_template('atm.html', branches=branches, atms=atms, atm=atm, groups=groups, cash_balance=cash_balance, devices=devices)
+    print("***", device , "****")
+    return render_template('atm.html', branches=branches, atms=atms, atm=atm, groups=groups, cash_balance=cash_balance, devices=devices, trans=trans)
 
 @app2.route('/groups/<group_id>', strict_slashes=False)
 def group(group_id):

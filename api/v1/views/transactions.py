@@ -20,8 +20,39 @@ def get_transaction_by_elj(elj_id):
         list_tr.append(transaction.to_dict())
     return jsonify(list_tr)
 
+
+@app_views.route('/transaction_chart/<atm_id>', strict_slashes=False)
+def transaction_chart(atm_id):
+    """
+    Retrieve a dictionnary of a specific Transaction objects
+    """
+    all_transactions = storage.all(Transaction).values()
+    list_transactions = []
+    new = {}
+    w = 0
+    d = 0
+    t = 0
+    b = 0
+    for transaction in all_transactions:
+        if transaction.ejId == int(atm_id):
+            if transaction.transactionType == "Withdrawal":
+                w += 1
+            elif transaction.transactionType == "Deposit":
+                d += 1
+            elif transaction.transactionType == "Balance Inquiry":
+                b += 1
+            elif transaction.transactionType == "Transfer":
+                t += 1
+    total = w + d + b + t
+    new["withdrawal"] = int((w / total) * 100)
+    new["deposit"] = int((d / total) * 100)
+    new["balanceInquiry"] = int((b / total) * 100)
+    new["transfer"] = int((t / total) * 100)
+    return jsonify(new)
+
+
 @app_views.route('/transactions', strict_slashes=False)
-def get_transactions():
+def get_transactions_chart():
     """
     Retrieves the list of all Transaction objects
     """
